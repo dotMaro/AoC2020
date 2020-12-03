@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // OpenFile wraps os.Open.
@@ -33,4 +34,10 @@ func ReadFile(name string) string {
 // Print to console.
 func Print(format string, a ...interface{}) {
 	fmt.Printf(format+"\n", a...)
+}
+
+// SplitLine splits s into a slice of lines.
+// It supports both with carriage return and without.
+func SplitLine(s string) []string {
+	return strings.Split(strings.ReplaceAll(s, "\r\n", "\n"), "\n")
 }
