@@ -31,27 +31,22 @@ func findHighestSeatID(input string) (float64, seatIDSet) {
 
 // seatID takes an input and returns the seat ID.
 func seatID(s string) float64 {
-	// Get row
-	var l, u float64 = 0, 127
-	for _, c := range s[:7] {
-		if c == 'F' {
-			u = math.Floor((l + u) / 2)
-		} else {
-			l = math.Ceil((l + u) / 2)
-		}
-	}
-	row := l
-	// Get column
-	l, u = 0, 7
-	for _, c := range s[7:] {
-		if c == 'L' {
-			u = math.Floor((l + u) / 2)
-		} else {
-			l = math.Ceil((l + u) / 2)
-		}
-	}
-	column := l
+	row := getValue(s[:7], 127, 'F')
+	column := getValue(s[7:], 7, 'L')
 	return row*8 + column
+}
+
+// getValue from a binary space partitioning string.
+func getValue(s string, upper float64, upperRune rune) float64 {
+	var l, u float64 = 0, upper
+	for _, c := range s {
+		if c == upperRune {
+			u = math.Floor((l + u) / 2)
+		} else {
+			l = math.Ceil((l + u) / 2)
+		}
+	}
+	return l
 }
 
 type seatIDSet map[float64]struct{}
