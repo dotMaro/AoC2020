@@ -69,15 +69,13 @@ func (s seatIDSet) findVacantSeat() float64 {
 	// Go through all added seat IDs and check if they have
 	// a neighbor that is vacant (not added) and itself have both
 	// neighbors present.
-	vacantSeat := 0.0
 	for seatID := range s {
 		leftID := seatID - 1
 		_, hasLeft := s[leftID]
 		if !hasLeft {
 			_, leftHasLeft := s[leftID-1]
 			if leftHasLeft {
-				vacantSeat = leftID
-				break
+				return leftID
 			}
 		}
 		rightID := seatID + 1
@@ -85,10 +83,9 @@ func (s seatIDSet) findVacantSeat() float64 {
 		if !hasRight {
 			_, rightHasRight := s[rightID+1]
 			if rightHasRight {
-				vacantSeat = rightID
-				break
+				return rightID
 			}
 		}
 	}
-	return vacantSeat
+	return 0.0
 }
