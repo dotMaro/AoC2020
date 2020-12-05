@@ -1,6 +1,8 @@
 package main
 
 import (
+	"sync"
+
 	"github.com/dotMaro/AoC2020/utils"
 )
 
@@ -11,6 +13,7 @@ func main() {
 	treesHit2 := treeMap.traverse(3, 1)
 	utils.Print("Task 1. Trees hit %d", treesHit2)
 	product := treeMap.multiTraverse([]slope{{1, 1}, {5, 1}, {7, 1}, {1, 2}}) * treesHit2
+	// product := treeMap.concurrentMultiTraverse([]slope{{1, 1}, {5, 1}, {7, 1}, {1, 2}}) * treesHit2
 	utils.Print("Task 2. Product %d", product)
 }
 
@@ -52,5 +55,29 @@ func (m treeMap) multiTraverse(slopes []slope) int {
 	for _, s := range slopes {
 		product *= m.traverse(s.x, s.y)
 	}
+	return product
+}
+
+func (m treeMap) concurrentTraverse(wg *sync.WaitGroup, c chan<- int, x, y int) {
+	c <- m.traverse(x, y)
+	wg.Done()
+}
+
+// multitraverse traverses in multiple slopes and return the product of trees hit.
+func (m treeMap) concurrentMultiTraverse(slopes []slope) int {
+	var (
+		product    = 1
+		slopeCount = len(slopes)
+		wg         sync.WaitGroup
+		c          = make(chan int, slopeCount)
+	)
+	wg.Add(slopeCount)
+	for _, s := range slopes {
+		go m.concurrentTraverse(&wg, c, s.x, s.y)
+	}
+	for i := 0; i < slopeCount; i++ {
+		product *= <-c
+	}
+	wg.Wait()
 	return product
 }
