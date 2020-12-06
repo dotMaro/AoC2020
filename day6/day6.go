@@ -29,8 +29,8 @@ func answerSum(s string) int {
 	return sum + len(answers)
 }
 
-// collectiveAnswerSum returns the sum of yes answers that every
-// individual in a group has answered.
+// collectiveAnswerSum returns the sum of answers that every
+// individual in a group has answered yes to.
 func collectiveAnswerSum(s string) int {
 	collectiveAnswers := make(map[rune]struct{})
 	sum := 0
