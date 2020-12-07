@@ -12,10 +12,19 @@ func main() {
 
 	rules := parseRules(input)
 	bag := rules.bagWithColor("shiny gold")
-	count := bag.containedByCount()
-	utils.Print("Task 1. There are %d bags that contain shiny gold bags.", count)
-	containCount := bag.mustContain()
-	utils.Print("Task 2. Shiny gold bags must contain %d other bags.", containCount)
+	part1, part2 := make(chan struct{}), make(chan struct{})
+	go func(chan struct{}) {
+		count := bag.containedByCount()
+		utils.Print("Task 1. There are %d bags that contain shiny gold bags.", count)
+		close(part1)
+	}(part1)
+	go func(chan struct{}) {
+		containCount := bag.mustContain()
+		utils.Print("Task 2. Shiny gold bags must contain %d other bags.", containCount)
+		close(part2)
+	}(part2)
+	<-part1
+	<-part2
 }
 
 func parseRules(input string) rules {
