@@ -12,14 +12,14 @@ acc +1
 jmp -4
 acc +6`
 
-func TestInterpreterRun(t *testing.T) {
+func TestRun(t *testing.T) {
 	_, res := run(input)
 	if res != 5 {
 		t.Errorf("Should return 5, but returned %d", res)
 	}
 }
 
-func TestInterpreterRepair(t *testing.T) {
+func TestRepair(t *testing.T) {
 	res := repair(input)
 	if res != 8 {
 		t.Errorf("Should return 8, but returned %d", res)

@@ -31,6 +31,37 @@ type interpreter struct {
 	acc int
 }
 
+// executeOp and return if it was a success.
+func (i *interpreter) executeOp(s string) bool {
+	switch s[:3] {
+	case "acc":
+		value, _ := strconv.Atoi(s[5:])
+		switch s[4] {
+		case '+':
+			i.acc += value
+		case '-':
+			i.acc -= value
+		}
+		i.pc++
+	case "jmp":
+		value, _ := strconv.Atoi(s[5:])
+		if value == 0 {
+			// 0 jump, failure
+			return false
+		}
+		switch s[4] {
+		case '+':
+			i.pc += value
+		case '-':
+			i.pc -= value
+		}
+	case "nop":
+		i.pc++
+	}
+
+	return true
+}
+
 // run a program and return if it was a successful execution and the acc value.
 // Even if the execution is not successful acc will be returned.
 func run(s string) (bool, int) {
@@ -54,30 +85,9 @@ func run(s string) (bool, int) {
 		}
 		// Nothing uses the set during execution so it is safe to set before the actual execution
 		instructionsRun[i.pc] = struct{}{}
-		switch line[:3] {
-		case "acc":
-			value, _ := strconv.Atoi(line[5:])
-			switch line[4] {
-			case '+':
-				i.acc += value
-			case '-':
-				i.acc -= value
-			}
-			i.pc++
-		case "jmp":
-			value, _ := strconv.Atoi(line[5:])
-			if value == 0 {
-				// 0 jump, failure
-				return false, i.acc
-			}
-			switch line[4] {
-			case '+':
-				i.pc += value
-			case '-':
-				i.pc -= value
-			}
-		case "nop":
-			i.pc++
+		success := i.executeOp(line)
+		if !success {
+			return false, i.acc
 		}
 	}
 }
