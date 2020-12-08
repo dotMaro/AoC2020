@@ -93,7 +93,8 @@ func run(s string) (bool, int) {
 }
 
 func repair(s string) int {
-	for ix := 0; ix < strings.Count(s, "\n"); ix++ {
+	lineCount := strings.Count(s, "\n")
+	for ix := 0; ix < lineCount; ix++ {
 		// First try replacing the nth jmp with nop
 		normal, acc := run(replaceNth(s, "jmp", "nop", ix))
 		if normal {
