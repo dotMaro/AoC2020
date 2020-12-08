@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/dotMaro/AoC2020/utils"
+)
 
 const input = `nop +0
 acc +1
@@ -54,5 +58,12 @@ acc +6`
 		if res != tc.expect {
 			t.Errorf("Should return %s but returned %s", tc.expect, res)
 		}
+	}
+}
+
+func BenchmarkRepair(b *testing.B) {
+	input := utils.ReadFile("input.txt")
+	for i := 0; i < b.N; i++ {
+		repair(input)
 	}
 }
