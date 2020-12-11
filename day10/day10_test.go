@@ -49,7 +49,12 @@ const input2 = `28
 func TestDistribution(t *testing.T) {
 	a := newAdapters(input1)
 	res := a.distribution()
-	if res != 22 {
+	if res != 7*5 {
+		t.Errorf("Should return 22 but returned %d", res)
+	}
+	a = newAdapters(input2)
+	res = a.distribution()
+	if res != 22*10 {
 		t.Errorf("Should return 22 but returned %d", res)
 	}
 }
