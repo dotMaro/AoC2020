@@ -84,7 +84,6 @@ func traverse(s string) int {
 func traverseWaypoint(s string) int {
 	waypointEast, waypointNorth := 10, 1
 	var shipEast, shipNorth int
-	// direction := eastDirection
 	for _, line := range utils.SplitLine(s) {
 		value, _ := strconv.Atoi(line[1:])
 		switch line[0] {
