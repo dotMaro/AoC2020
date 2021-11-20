@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -24,7 +24,7 @@ func OpenFile(name string) *os.File {
 func ReadFile(name string) string {
 	file := OpenFile(name)
 	defer file.Close()
-	inputBytes, err := ioutil.ReadAll(file)
+	inputBytes, err := io.ReadAll(file)
 	if err != nil {
 		panic(err)
 	}
